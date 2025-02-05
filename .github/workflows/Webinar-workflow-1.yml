@@ -16,28 +16,24 @@ env:
   FIRST_UNDO_SCRIPT: "002" # This should match the first undo version in your project
 
 jobs:
-  Deploy-to-prod:
+  Deploy:
     name: Deploy Prod
     # The type of runner that the job will run on
     runs-on: "self-hosted" # Options - self-hosted/ubuntu-latest/windows-latest (See here for more details on GitHub hosted runners - https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
-    environment: 'prod'
+    environment: 'Prod'
     env:
-      stage: 'Prod'
-      DATABASE_NAME: "AutoPilotProd"
-      ENVIRONMENT: "Prod" # Refers to the environment name in the Flyway Project TOML file.
- 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+      stage: 'Deploy'
+      displayName: 'Deploy'
+      DATABASE_NAME: 'AutoPilotProd'
+      ENVIRONMENT: 'Prod' # This variable refers to the environment name present in the Flyway Projects TOML file. 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/download-artifact@v4
-        with:
-          name: flyway-build-artifact-${{ github.run_number }}
-       # Step 1 - Flyway License Authentication #
+      - uses: actions/checkout@v4
+      # Step 1 - Flyway License Authentication #
       - name: Flyway Authentication
-        run: |
+        run: 
          flyway auth -IAgreeToTheEula -email="${{ env.FLYWAY_EMAIL }}" -token="${{ env.FLYWAY_TOKEN }}"
-      # Step 2 - Deploy pending migrations to target database
-      - name: Migrate Production DB
-        if: success()
-        run: |
-          flyway info migrate info -environment="${{ env.ENVIRONMENT }}" -user="${{ env.TARGET_DATABASE_USERNAME }}" -password="${{ env.TARGET_DATABASE_PASSWORD }}" -baselineOnMigrate="true" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations"
+      # Step 2 - Migrate all scripts from the migration folder, to verify they can be deployed against an empty database. This is the quickest way to get feedback about problematic scripts
+      - name: Migrate Prod DB
+        run: 
+          flyway info migrate info -environment="${{ env.ENVIRONMENT }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" -cleanDisabled='false' -baselineOnMigrate="true" 
