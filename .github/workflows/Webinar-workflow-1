@@ -1,0 +1,43 @@
+# This is a basic workflow to help you get started with Actions
+ 
+name: Webinar-workflow-1
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  # Auth
+  FLYWAY_EMAIL: "${{ secrets.FLYWAY_EMAIL }}" # Enter the email address linked to the Redgate Account that created the PAT
+  FLYWAY_TOKEN: "${{ secrets.FLYWAY_TOKEN }}" # Enter the PAT Value (This should be treated like a password and thus as a secure variable.
+  
+  # Project settings
+  BASELINE_VERSION: "001" # This should match the version number of your baseline script
+  FIRST_UNDO_SCRIPT: "002" # This should match the first undo version in your project
+
+jobs:
+  Deploy to prod:
+    name: Deploy Prod
+    # The type of runner that the job will run on
+    runs-on: "self-hosted" # Options - self-hosted/ubuntu-latest/windows-latest (See here for more details on GitHub hosted runners - https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
+    environment: 'prod'
+    env:
+      stage: 'Prod'
+      DATABASE_NAME: "AutoPilotProd"
+      ENVIRONMENT: "Prod" # Refers to the environment name in the Flyway Project TOML file.
+ 
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/download-artifact@v4
+        with:
+          name: flyway-build-artifact-${{ github.run_number }}
+       # Step 1 - Flyway License Authentication #
+      - name: Flyway Authentication
+        run: |
+         flyway auth -IAgreeToTheEula -email="${{ env.FLYWAY_EMAIL }}" -token="${{ env.FLYWAY_TOKEN }}"
+      # Step 2 - Deploy pending migrations to target database
+      - name: Migrate Production DB
+        if: success()
+        run: |
+          flyway info migrate info -environment="${{ env.ENVIRONMENT }}" -user="${{ env.TARGET_DATABASE_USERNAME }}" -password="${{ env.TARGET_DATABASE_PASSWORD }}" -baselineOnMigrate="true" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations"
