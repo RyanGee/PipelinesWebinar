@@ -16,7 +16,7 @@ env:
   FIRST_UNDO_SCRIPT: "002" # This should match the first undo version in your project
 
 jobs:
-  Deploy to prod:
+  Deploy-to-prod:
     name: Deploy Prod
     # The type of runner that the job will run on
     runs-on: "self-hosted" # Options - self-hosted/ubuntu-latest/windows-latest (See here for more details on GitHub hosted runners - https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
