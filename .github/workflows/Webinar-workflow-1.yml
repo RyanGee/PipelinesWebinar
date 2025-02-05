@@ -19,21 +19,18 @@ jobs:
   Deploy:
     name: Deploy Prod
     # The type of runner that the job will run on
-    runs-on: "self-hosted" # Options - self-hosted/ubuntu-latest/windows-latest (See here for more details on GitHub hosted runners - https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
-    environment: 'Prod'
-    env:
-      stage: 'Deploy'
-      displayName: 'Deploy'
-      DATABASE_NAME: 'AutoPilotProd'
-      ENVIRONMENT: 'Prod' # This variable refers to the environment name present in the Flyway Projects TOML file. 
+    runs-on: "self-hosted" # (See here for more details on GitHub hosted runners - https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
+    
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      # Step 1 - Flyway License Authentication #
+      
+      # Step 1 - Flyway License Authentication
       - name: Flyway Authentication
         run: 
          flyway auth -IAgreeToTheEula -email="${{ env.FLYWAY_EMAIL }}" -token="${{ env.FLYWAY_TOKEN }}"
-      # Step 2 - Migrate all scripts from the migration folder, to verify they can be deployed against an empty database. This is the quickest way to get feedback about problematic scripts
+      
+      # Step 2 - Execute scripts from the migration folder
       - name: Migrate Prod DB
         run: 
-          flyway info migrate info -environment="${{ env.ENVIRONMENT }}" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" -cleanDisabled='false' -baselineOnMigrate="true" 
+          flyway info migrate info -environment="Prod" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" -cleanDisabled='false' -baselineOnMigrate="true" 
