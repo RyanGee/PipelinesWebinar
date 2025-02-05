@@ -31,7 +31,6 @@ displayName = "Build database"
 [flyway]
 locations = [ "filesystem:migrations" ]
 mixed = true
-outOfOrder = true
 validateMigrationNaming = true
 defaultSchema = "dbo"
 baselineOnMigrate = true
