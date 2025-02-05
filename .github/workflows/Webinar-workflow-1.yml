@@ -33,4 +33,4 @@ jobs:
       # Step 2 - Execute scripts from the migration folder
       - name: Migrate Prod DB
         run: 
-          flyway info migrate info -environment="Prod" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" -cleanDisabled='false' -baselineOnMigrate="true" 
+          flyway info migrate info -environment="Prod" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" 
