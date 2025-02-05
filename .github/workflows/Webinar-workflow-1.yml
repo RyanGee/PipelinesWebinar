@@ -10,10 +10,6 @@ env:
   # Auth
   FLYWAY_EMAIL: "${{ secrets.FLYWAY_EMAIL }}" # Enter the email address linked to the Redgate Account that created the PAT
   FLYWAY_TOKEN: "${{ secrets.FLYWAY_TOKEN }}" # Enter the PAT Value (This should be treated like a password and thus as a secure variable.
-  
-  # Project settings
-  BASELINE_VERSION: "001" # This should match the version number of your baseline script
-  FIRST_UNDO_SCRIPT: "002" # This should match the first undo version in your project
 
 jobs:
   Deploy:
