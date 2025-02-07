@@ -1,20 +1,15 @@
-# This is a basic workflow to help you get started with Actions
- 
-name: Webinar-workflow-1
+# This is a basic workflow to help you get started with Action
+name: Deploy-prod
 
-on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+on: workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
 
 env:
-  # Auth
   FLYWAY_EMAIL: "${{ secrets.FLYWAY_EMAIL }}" # Enter the email address linked to the Redgate Account that created the PAT
   FLYWAY_TOKEN: "${{ secrets.FLYWAY_TOKEN }}" # Enter the PAT Value (This should be treated like a password and thus as a secure variable.
 
 jobs:
-  Deploy:
+  deploy:
     name: Deploy Prod
-    # The type of runner that the job will run on
     runs-on: "self-hosted" # (See here for more details on GitHub hosted runners - https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
     
     steps:
@@ -23,10 +18,8 @@ jobs:
       
       # Step 1 - Flyway License Authentication
       - name: Flyway Authentication
-        run: 
-         flyway auth -IAgreeToTheEula -email="${{ env.FLYWAY_EMAIL }}" -token="${{ env.FLYWAY_TOKEN }}"
+        run: flyway auth -IAgreeToTheEula -email="${{ env.FLYWAY_EMAIL }}" -token="${{ env.FLYWAY_TOKEN }}"
       
       # Step 2 - Execute scripts from the migration folder
       - name: Migrate Prod DB
-        run: 
-          flyway info migrate info -environment="Prod" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" 
+        run: flyway info migrate info -environment="Prod" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" 
