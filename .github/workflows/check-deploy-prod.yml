@@ -82,7 +82,7 @@ jobs:
       
       # Step 2 - Create Check Report 
       - name: Create Check Reports
-        run: flyway check -dryrun -changes -drift -environment="Prod" -check.failOnDrift="true" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" "-check.buildEnvironment=Check" "-reportFilename=${{ GITHUB.WORKSPACE }}\reports\AutoPilotProd-Run-${{ GITHUB.RUN_ID }}-Prod-Check-Report.html" 
+        run: flyway check -dryrun -changes -drift -environment="Prod" -"check.failOnDrift=true" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" "-check.buildEnvironment=Check" "-reportFilename=${{ GITHUB.WORKSPACE }}\reports\AutoPilotProd-Run-${{ GITHUB.RUN_ID }}-Prod-Check-Report.html" 
         
       # Step 3 - Publish Check Report
       - name: Publish Check Report as Artifact
