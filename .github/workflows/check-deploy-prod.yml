@@ -2,8 +2,9 @@
  
 name: Check-deploy-prod
 
-on: 
- workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: 
 env:
 
   FLYWAY_EMAIL: "${{ secrets.FLYWAY_EMAIL }}" # Enter the email address linked to the Redgate Account that created the PAT
