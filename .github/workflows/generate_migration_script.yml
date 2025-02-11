@@ -27,7 +27,6 @@ jobs:
             echo "Skipping CI"
             exit 0
           }
-        shell: pwsh
 
       - name: Get PR Title for Migration Script
         if: github.event_name == 'pull_request'
@@ -36,7 +35,6 @@ jobs:
           $sanitizedTitle = $pr_title -replace '[^a-zA-Z0-9]', ''
           echo "Sanitized PR Title: $sanitizedTitle"
           echo "FLYWAY_VERSION_DESCRIPTION_SANITIZED=$sanitizedTitle" >> $GITHUB_ENV
-        shell: pwsh
 
       - name: Flyway CLI - Create Diff Artifact
         run: |
@@ -46,7 +44,6 @@ jobs:
           "-diff.buildEnvironment=shadow" `
           "-diff.artifactFilename=${{ env.WORKING_DIRECTORY }}\Flyway.Diff.zip" `
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-        shell: pwsh
 
       - name: Generate Migration Script
         run: |
@@ -56,12 +53,10 @@ jobs:
           "-generate.types=versioned,undo" `
           "-generate.artifactFilename=${{ env.WORKING_DIRECTORY }}\Flyway.Diff.zip" `
           -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-        shell: pwsh
 
       - name: Commit and Push Changes
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
-        shell: pwsh
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
