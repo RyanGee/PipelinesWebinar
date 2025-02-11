@@ -5,7 +5,7 @@ name: Check-deploy-prod
 on:
   push:
     branches:
-      - Nmain
+      - main
 env:
 
   FLYWAY_EMAIL: "${{ secrets.FLYWAY_EMAIL }}" # Enter the email address linked to the Redgate Account that created the PAT
