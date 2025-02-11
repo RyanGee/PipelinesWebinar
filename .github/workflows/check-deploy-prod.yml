@@ -3,8 +3,9 @@
 name: Check-deploy-prod
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch: 
+  push:
+    branches:
+      - Nmain
 env:
 
   FLYWAY_EMAIL: "${{ secrets.FLYWAY_EMAIL }}" # Enter the email address linked to the Redgate Account that created the PAT
@@ -82,11 +83,11 @@ jobs:
       
       # Step 2 - Create Check Report 
       - name: Create Check Reports
-        run: flyway check -dryrun -changes -drift -environment="Prod" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" "-check.buildEnvironment=Check" "-reportFilename=${{ GITHUB.WORKSPACE }}\reports\AutoPilotProd-Run-${{ GITHUB.RUN_ID }}-Prod-Check-Report.html" 
-        continue-on-error: false
-        
+        run: flyway check -dryrun -changes -drift -environment="Prod" -"check.failOnDrift=true" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" "-check.buildEnvironment=Check" "-reportFilename=${{ GITHUB.WORKSPACE }}\reports\AutoPilotProd-Run-${{ GITHUB.RUN_ID }}-Prod-Check-Report.html" 
+      
       # Step 3 - Publish Check Report
       - name: Publish Check Report as Artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with: 
           name: flyway-reports-prod
@@ -94,5 +95,4 @@ jobs:
           
       # Step 4 - Deploy pending migrations to target database
       - name: Migrate Production DB
-        if: success()
         run: flyway info migrate info -environment="Prod" -baselineOnMigrate="true" -configFiles="${{ GITHUB.WORKSPACE }}\flyway.toml" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations"

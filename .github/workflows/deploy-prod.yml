@@ -2,8 +2,7 @@
 name: Deploy-prod
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch: 
+  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
 
 env:
   FLYWAY_EMAIL: "${{ secrets.FLYWAY_EMAIL }}" # Enter the email address linked to the Redgate Account that created the PAT
@@ -12,7 +11,7 @@ env:
 jobs:
   deploy:
     name: Deploy Prod
-    runs-on: "self-hosted" # (See here for more details on GitHub hosted runners - https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
+    runs-on: "self-hosted" # (https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
     
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
