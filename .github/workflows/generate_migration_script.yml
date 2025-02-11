@@ -79,5 +79,5 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
           git add .
-          git commit -m "Flyway Dev - Auto Generated Migration Scripts [skip ci]" || Write-Host "No changes to commit"
+          git commit -m "Flyway Dev - Auto Generated Migration Scripts"
           git push origin $branchName
