@@ -2,15 +2,6 @@ id = "97ea357d-2613-4415-b434-775478105625"
 name = "Pipelines Webinar"
 databaseType = "SqlServer"
 
-[environments.development]
-url = "jdbc:sqlserver://localhost;databaseName=AutoPilotDev;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
-displayName = "Development database"
-
-[environments.shadow]
-url = "jdbc:sqlserver://localhost;databaseName=AutoPilotShadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
-displayName = "Shadow database"
-provisioner = "clean"
-
 [environments.Prod]
 url = "jdbc:sqlserver://localhost;databaseName=AutoPilotProd;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
 displayName = "Production Database"
