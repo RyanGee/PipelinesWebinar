@@ -3,7 +3,7 @@ name = "Pipelines Webinar"
 databaseType = "SqlServer"
 
 [environments.Prod]
-url = "jdbc:sqlserver://localhost;databaseName=Tundra;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+url = "jdbc:sqlserver://localhost;databaseName=AutoPilotProd;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
 displayName = "Production Database"
 
 [flyway]
