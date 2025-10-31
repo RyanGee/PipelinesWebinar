@@ -7,19 +7,14 @@ on:
 
 jobs:
   check:
-    name: Check
-    runs-on: self-hosted
-    env:
-      WORKING_DIRECTORY: ${{ github.workspace }}
-      FLYWAY_ENV_NATIVE_SQLFLUFF: true
-
+    name: Flyway Check
+    runs-on: "self-hosted" # (https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)
+    
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/download-artifact@v4
-        with:
-          name: flyway-build-artifact-${{ github.run_number }}
-     
-       # Step 1 - Flyway License Authentication #
+      - uses: actions/checkout@v4
+      
+      # Step 1 - Flyway License Authentication
       - name: Flyway Authentication
         run: flyway auth -IAgreeToTheEula -email="${{ env.FLYWAY_EMAIL }}" -token="${{ env.FLYWAY_TOKEN }}"
       
