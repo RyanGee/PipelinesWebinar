@@ -1,9 +1,9 @@
 name: Flyway-Simple-Migration-GitHub
 
 on:
-  pull_request:
-    branches:
-      - main
+#  pull_request:
+ #   branches:
+  #    - main
 
 jobs:
   build:
